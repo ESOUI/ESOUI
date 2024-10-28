@@ -2693,7 +2693,7 @@ SafeAddString(SI_INTERFACE_OPTIONS_NAMEPLATES_SHOW_PLAYER_TITLES, "称号表示"
 SafeAddString(SI_INTERFACE_OPTIONS_NAMEPLATES_SHOW_PLAYER_TITLES_TOOLTIP, "プレイヤーの称号を名前の一部として表示するかどうかを設定する。", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_SETTINGS_PANEL_UNAVAILABLE, "<<1>>設定は現在利用できません。後ほどお試し下さい。", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_TEXT_LANGUAGE, "テキスト言語", 0)
-SafeAddString(SI_INTERFACE_OPTIONS_TEXT_LANGUAGE_TOOLTIP, "UIで表示されるテキスト言語を選択してください。ボイスオーバー言語には影響しません。デフォルトのテキスト言語オプションの選択を適用するには、再起動が必要になります。", 2)
+SafeAddString(SI_INTERFACE_OPTIONS_TEXT_LANGUAGE_TOOLTIP, "UIで表示されるテキスト言語を選択してください。ボイスオーバー言語には影響しません。", 2)
 SafeAddString(SI_INVALID_NAME_DIALOG_INSTRUCTION_FORMAT, "<<1>>", 0)
 SafeAddString(SI_INVALID_NAME_DIALOG_TITLE, "無効な名前", 0)
 SafeAddString(SI_ITEMCOMBINATIONRESULT1, "結束に失敗しました。", 0)

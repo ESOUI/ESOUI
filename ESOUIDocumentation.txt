@@ -768,6 +768,13 @@ h5. PlatformAccountLabel
 * ACCOUNT_LABEL_XBOX
 
 
+h5. PlatformDialogResult
+* PLATFORM_DIALOG_RESULT_CLOSED_FROM_CODE
+* PLATFORM_DIALOG_RESULT_ERROR
+* PLATFORM_DIALOG_RESULT_OK
+* PLATFORM_DIALOG_RESULT_USER_CANCELED
+
+
 h5. PlatformStoreDialogResult
 * PLATFORM_STORE_DIALOG_RESULT_CLOSED_FROM_CODE
 * PLATFORM_STORE_DIALOG_RESULT_ERROR
@@ -1472,6 +1479,7 @@ h5. ActivityFinderStatus
 
 
 h5. ActivityQueueResult
+* ACTIVITY_QUEUE_RESULT_ACTIVITY_DISABLED
 * ACTIVITY_QUEUE_RESULT_CAMPAIGN_MISMATCH
 * ACTIVITY_QUEUE_RESULT_CANNOT_QUEUE_IN_BATTLEGROUND
 * ACTIVITY_QUEUE_RESULT_DEPRECATED_REUSE_ME
@@ -1499,6 +1507,7 @@ h5. ActivityQueueResult
 * ACTIVITY_QUEUE_RESULT_QUEUE_BUSY
 * ACTIVITY_QUEUE_RESULT_QUEUE_FULL
 * ACTIVITY_QUEUE_RESULT_QUEUE_TTL_EXPIRED
+* ACTIVITY_QUEUE_RESULT_REMOVED_FROM_DISABLED_ACTIVITY
 * ACTIVITY_QUEUE_RESULT_REQUEST_QUEUED
 * ACTIVITY_QUEUE_RESULT_REQUEST_QUEUE_FAILURE
 * ACTIVITY_QUEUE_RESULT_SUCCESS
@@ -9057,6 +9066,13 @@ h5. ActionResult
 * ACTION_RESULT_WRONG_WEAPON
 
 
+h5. BattlegroundResult
+* BATTLEGROUND_RESULT_INVALID
+* BATTLEGROUND_RESULT_LOSS
+* BATTLEGROUND_RESULT_TIE
+* BATTLEGROUND_RESULT_WIN
+
+
 h5. BattlegroundRoundResult
 * BATTLEGROUND_ROUND_RESULT_ENEMY_LEFT
 * BATTLEGROUND_ROUND_RESULT_HIGHEST_SCORE_WIN
@@ -10598,7 +10614,6 @@ h5. OfficialLanguage
 
 
 h5. Globals
-* ZO_DEFAULT_LANGUAGE_SETTING_VALUE
 
 
 h5. ScriptProfilerGarbageCollectionType
@@ -13696,12 +13711,6 @@ h2. Game API
 * GetJournalQuestZoneStoryZoneId(*luaindex* _journalQuestIndex_)
 ** _Returns:_ *integer* _zoneId_
 
-* GetQuestZoneId(*integer* _questId_)
-** _Returns:_ *integer* _zoneId_
-
-* GetQuestName(*integer* _questId_)
-** _Returns:_ *string* _name_
-
 * HasQuest(*integer* _questId_)
 ** _Returns:_ *bool* _hasQuest_
 
@@ -14328,12 +14337,6 @@ h2. Game API
 * GetCollectibleIdForZone(*luaindex* _zoneIndex_)
 ** _Returns:_ *integer* _collectibleId_
 
-* IsZoneCollectibleLocked(*luaindex* _zoneIndex_)
-** _Returns:_ *bool* _isZoneCollectibleLocked_
-
-* GetZoneIndex(*integer* _zoneId_)
-** _Returns:_ *luaindex* _zoneIndex_
-
 * GetPOIZoneCompletionType(*luaindex* _zoneIndex_, *luaindex* _poiIndex_)
 ** _Returns:_ *[ZoneCompletionType|#ZoneCompletionType]* _zoneCompletionType_
 
@@ -14642,6 +14645,9 @@ h2. Game API
 * GetNextBattlegroundLeaderboardType(*[BattlegroundLeaderboardType|#BattlegroundLeaderboardType]:nilable* _lastBattlegroundLeaderboardType_)
 ** _Returns:_ *[BattlegroundLeaderboardType|#BattlegroundLeaderboardType]:nilable* _nextBattlegroundLeaderboardType_
 
+* ShouldShowLeaderboardForBattlegroundLeaderboardType(*[BattlegroundLeaderboardType|#BattlegroundLeaderboardType]* _battlegroundLeaderboardType_)
+** _Returns:_ *bool* _shouldShow_
+
 * GetNumBattlegroundLeaderboardEntries(*[BattlegroundLeaderboardType|#BattlegroundLeaderboardType]* _battlegroundLeaderboardType_)
 ** _Returns:_ *integer* _numLeaderboardEntries_
 
@@ -14701,6 +14707,9 @@ h2. Game API
 * DidCurrentBattlegroundTeamWinOrTieRound(*[BattlegroundTeam|#BattlegroundTeam]* _battlegroundTeam_, *luaindex:nilable* _roundIndex_)
 ** _Returns:_ *bool* _wonOrTied_
 
+* GetBattlegroundResultForTeam(*[BattlegroundTeam|#BattlegroundTeam]* _battlegroundTeam_)
+** _Returns:_ *[BattlegroundResult|#BattlegroundResult]* _result_
+
 * GetCurrentBattlegroundState()
 ** _Returns:_ *[BattlegroundState|#BattlegroundState]* _result_
 
@@ -14710,7 +14719,7 @@ h2. Game API
 * GetCurrentBattlegroundStateTimeRemaining()
 ** _Returns:_ *integer* _timeRemaining_
 
-* GetScoreboardPlayerEntryIndex(*luaindex* _roundIndex_)
+* GetScoreboardLocalPlayerEntryIndex(*luaindex:nilable* _roundIndex_)
 ** _Returns:_ *luaindex* _playerIndex_
 
 * GetCampaignAllianceScore(*integer* _campaignId_, *[Alliance|#Alliance]* _alliance_)
@@ -16811,6 +16820,12 @@ h2. Game API
 ** _Returns:_ *integer* _questId_
 
 * BestowActivityTypeGatingQuest(*[LFGActivity|#LFGActivity]* _activity_)
+
+* IsLFGActivitySetDisabled(*integer* _activitySetId_)
+** _Returns:_ *bool* _disabled_
+
+* IsLFGActivityDisabled(*integer* _activityId_)
+** _Returns:_ *bool* _disabled_
 
 * HasLFGReadyCheckNotification()
 ** _Returns:_ *bool* _hasReadyCheckNotification_
@@ -18938,9 +18953,6 @@ h2. Game API
 * GetCompanionCollectibleId(*integer* _companionId_)
 ** _Returns:_ *integer* _collectibleId_
 
-* GetCompanionIntroQuestId(*integer* _companionId_)
-** _Returns:_ *integer* _questId_
-
 * GetCompanionName(*integer* _companionId_)
 ** _Returns:_ *string* _name_
 
@@ -20675,6 +20687,15 @@ h2. Game API
 * GetCollectibleLinkedAchievement(*integer* _collectibleId_)
 ** _Returns:_ *integer* _achievementId_
 
+* GetCompanionIntroQuestId(*integer* _companionId_)
+** _Returns:_ *integer* _questId_
+
+* GetQuestZoneId(*integer* _questId_)
+** _Returns:_ *integer* _zoneId_
+
+* GetQuestName(*integer* _questId_)
+** _Returns:_ *string* _name_
+
 * UpdateMarketDisplayGroup *private* (*[MarketDisplayGroup|#MarketDisplayGroup]* _displayGroup_)
 
 * GetNumMarketProductCategories *private* (*[MarketDisplayGroup|#MarketDisplayGroup]* _displayGroup_)
@@ -21635,6 +21656,12 @@ h2. Game API
 
 * CanJumpToHouseFromCurrentLocation()
 ** _Returns:_ *bool* _canJumpToHouseFromCurrentLocation_
+
+* GetZoneIndex(*integer* _zoneId_)
+** _Returns:_ *luaindex* _zoneIndex_
+
+* IsZoneCollectibleLocked(*luaindex* _zoneIndex_)
+** _Returns:_ *bool* _isZoneCollectibleLocked_
 
 * GetZoneNameById(*integer* _zoneId_)
 ** _Returns:_ *string* _name_
@@ -24963,6 +24990,7 @@ h2. Events
 * EVENT_BATTLEGROUND_INACTIVITY_WARNING
 * EVENT_BATTLEGROUND_KILL (*string* _killedPlayerCharacterName_, *string* _killedPlayerDisplayName_, *[BattlegroundTeam|#BattlegroundTeam]* _killedPlayerBattlegroundTeam_, *string* _killingPlayerCharacterName_, *string* _killingPlayerDisplayName_, *[BattlegroundTeam|#BattlegroundTeam]* _killingPlayerBattlegroundTeam_, *[BattlegroundKillType|#BattlegroundKillType]* _battlegroundKillType_, *integer* _killingAbilityId_)
 * EVENT_BATTLEGROUND_LEADERBOARD_DATA_RECEIVED (*[BattlegroundLeaderboardType|#BattlegroundLeaderboardType]* _battlegroundType_)
+* EVENT_BATTLEGROUND_MMR_LOSS_REDUCED (*[BattlegroundMMRBonusType|#BattlegroundMMRBonusType]* _reductionReason_)
 * EVENT_BATTLEGROUND_RULESET_CHANGED
 * EVENT_BATTLEGROUND_SCOREBOARD_UPDATED
 * EVENT_BATTLEGROUND_SHUTDOWN_TIMER (*bool* _enabled_)
@@ -25075,6 +25103,7 @@ h2. Events
 * EVENT_DAILY_LOGIN_MONTH_CHANGED
 * EVENT_DELETE_MAIL_RESPONSE (*id64* _mailId_, *bool* _success_)
 * EVENT_DEPOSE_EMPEROR_NOTIFICATION (*integer* _campaignId_, *string* _emperorCharacterName_, *[Alliance|#Alliance]* _emperorAlliance_, *bool* _abdication_, *string* _emperorDisplayName_)
+* EVENT_DISABLED_ACTIVITIES_UPDATE
 * EVENT_DISABLE_SIEGE_AIM_ABILITY
 * EVENT_DISABLE_SIEGE_FIRE_ABILITY
 * EVENT_DISABLE_SIEGE_PACKUP_ABILITY

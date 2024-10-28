@@ -2693,7 +2693,7 @@ SafeAddString(SI_INTERFACE_OPTIONS_NAMEPLATES_SHOW_PLAYER_TITLES, "Afficher titr
 SafeAddString(SI_INTERFACE_OPTIONS_NAMEPLATES_SHOW_PLAYER_TITLES_TOOLTIP, "Contrôle l'affichage du titre des joueurs à côté de leur nom.", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_SETTINGS_PANEL_UNAVAILABLE, "Les réglages de <<1>> sont actuellement indisponibles. Veuillez réessayer ultérieurement.", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_TEXT_LANGUAGE, "Langue du texte", 0)
-SafeAddString(SI_INTERFACE_OPTIONS_TEXT_LANGUAGE_TOOLTIP, "Détermine la langue du texte affiché dans l'interface. N'affecte pas la langue de doublage. Choisir l'option de langue de texte par défaut nécessitera un redémarrage pour appliquer le changement.", 2)
+SafeAddString(SI_INTERFACE_OPTIONS_TEXT_LANGUAGE_TOOLTIP, "Détermine la langue du texte affiché dans l'interface. N'affecte pas la langue de doublage.", 2)
 SafeAddString(SI_INVALID_NAME_DIALOG_INSTRUCTION_FORMAT, "<<1>>\n\n", 0)
 SafeAddString(SI_INVALID_NAME_DIALOG_TITLE, "Nom invalide", 0)
 SafeAddString(SI_ITEMCOMBINATIONRESULT1, "Échec de la combinaison.", 0)
