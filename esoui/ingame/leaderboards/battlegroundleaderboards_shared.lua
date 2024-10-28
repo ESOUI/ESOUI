@@ -37,6 +37,7 @@ do
         [BATTLEGROUND_LEADERBOARD_TYPE_DEATHMATCH] = "EsoUI/Art/Battlegrounds/Gamepad/gp_battlegrounds_tabIcon_deathmatch.dds",
         [BATTLEGROUND_LEADERBOARD_TYPE_LAND_GRAB] = "EsoUI/Art/Battlegrounds/Gamepad/gp_battlegrounds_tabIcon_landgrab.dds",
         [BATTLEGROUND_LEADERBOARD_TYPE_FLAG_GAMES] = "EsoUI/Art/Battlegrounds/Gamepad/gp_battlegrounds_tabIcon_flaggames.dds",
+        [BATTLEGROUND_LEADERBOARD_TYPE_COMPETITIVE] = "EsoUI/Art/Battlegrounds/Gamepad/gp_battlegrounds_tabIcon_competitive.dds"
     }
 
     function ZO_BattlegroundLeaderboardsManager_Shared:AddCategoriesToParentSystem()
@@ -66,12 +67,14 @@ do
 
         local createHeader = true
         for battlegroundLeaderboardType in GetNextBattlegroundLeaderboardTypeIter do
-            if createHeader then
-                self.header = self.leaderboardSystem:AddCategory(GetString(SI_BATTLEGROUND_LEADERBOARDS_CATEGORIES_HEADER), BATTLEGROUND_SHOW_HEADER_ICONS.up, BATTLEGROUND_SHOW_HEADER_ICONS.down, BATTLEGROUND_SHOW_HEADER_ICONS.over)
-                createHeader = false
-            end
+            if ShouldShowLeaderboardForBattlegroundLeaderboardType(battlegroundLeaderboardType) then
+                if createHeader then
+                    self.header = self.leaderboardSystem:AddCategory(GetString(SI_BATTLEGROUND_LEADERBOARDS_CATEGORIES_HEADER), BATTLEGROUND_SHOW_HEADER_ICONS.up, BATTLEGROUND_SHOW_HEADER_ICONS.down, BATTLEGROUND_SHOW_HEADER_ICONS.over)
+                    createHeader = false
+                end
 
-            AddEntry(self.header, GetString("SI_BATTLEGROUNDLEADERBOARDTYPE", battlegroundLeaderboardType), battlegroundLeaderboardType)
+                AddEntry(self.header, GetString("SI_BATTLEGROUNDLEADERBOARDTYPE", battlegroundLeaderboardType), battlegroundLeaderboardType)
+            end
         end
     end
 end
@@ -100,7 +103,7 @@ do
 
     function ZO_BattlegroundLeaderboardsManager_Shared:TimerLabelOnUpdate(currentTime)
         if currentTime - timerLabelLastUpdateSecs >= UPDATE_INTERVAL_SECS then
-            local secsUntilEnd, secsUntilNextStart = GetBattlegroundLeaderboardsSchedule()
+            local secsUntilEnd, secsUntilNextStart = GetBattlegroundLeaderboardsSchedule(self.selectedSubType)
 
             if secsUntilEnd > 0 then
                 self.timerLabelIdentifier = SI_LEADERBOARDS_CLOSES_IN_TIMER

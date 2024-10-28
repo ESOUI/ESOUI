@@ -25,6 +25,17 @@ function ZO_DailyLoginRewards_Gamepad:Initialize(control)
 
     self.exitScreenByBackingOutOfPreviewIndex = 0
 
+    local previewNarrationData =
+    {
+        canNarrate = function()
+            return IsCurrentlyPreviewing()
+        end,
+        selectedNarrationFunction = function()
+            return ITEM_PREVIEW_GAMEPAD:GetPreviewSpinnerNarrationText()
+        end,
+    }
+    SCREEN_NARRATION_MANAGER:RegisterCustomObject("dailyLoginRewardsPreview", previewNarrationData)
+
     self:InitializeGridListPanel()
 
     GAMEPAD_DAILY_LOGIN_PREVIEW_SCENE = ZO_Scene:New("dailyLoginRewardsPreview_Gamepad", SCENE_MANAGER)
@@ -47,7 +58,7 @@ function ZO_DailyLoginRewards_Gamepad:InitializeGridListPanel()
     self.gridListPanelList = ZO_SingleTemplateGridScrollList_Gamepad:New(gridListPanel, ZO_GRID_SCROLL_LIST_AUTOFILL, "ZO_Daily_Login_Reward_Highlight_Gamepad")
 
     local function DailyLoginRewardsGridEntryReset(control)
-        ZO_Daily_Login_Rewards_Gamepad_CleanupAnimationOnControl(control, self.currentRewardAnimationPool)
+        ZO_Daily_Login_Rewards_Gamepad_CleanupAnimationOnControl(control)
         self:GridEntryCleanup(control)
     end
 
@@ -258,8 +269,8 @@ do
             isCurrentReward = GetDailyLoginClaimableRewardIndex() == data.day
             local isMilestone = data.isMilestone
             if isCurrentReward then
-                if not control.pendingLoopAnimationKey then
-                    ZO_Restyle_ApplyPendingLoopAnimationToControl(control, pendingPool, PENDING_ANIMATION_INSET)
+                if not control.pendingLoop then
+                    ZO_PendingLoop.ApplyToControl(control, pendingPool, PENDING_ANIMATION_INSET)
                 end
                 edgeTexture = "EsoUI/Art/Restyle/Gamepad/gp_outfits_edge_bluePending_16.dds"
             else
@@ -273,16 +284,16 @@ do
         end
 
         if not isCurrentReward then
-            ZO_Daily_Login_Rewards_Gamepad_CleanupAnimationOnControl(control, pendingPool)
+            ZO_Daily_Login_Rewards_Gamepad_CleanupAnimationOnControl(control)
         end
 
         control.borderBackground:SetEdgeTexture(edgeTexture, ZO_GAMEPAD_DAILY_LOGIN_REWARDS_GRID_ENTRY_BORDER_EDGE_WIDTH, ZO_GAMEPAD_DAILY_LOGIN_REWARDS_GRID_ENTRY_BORDER_EDGE_HEIGHT)
     end
 end
 
-function ZO_Daily_Login_Rewards_Gamepad_CleanupAnimationOnControl(control, pendingPool)
-    if control.pendingLoopAnimationKey then
-        pendingPool:ReleaseObject(control.pendingLoopAnimationKey)
+function ZO_Daily_Login_Rewards_Gamepad_CleanupAnimationOnControl(control)
+    if control.pendingLoop then
+        control.pendingLoop:ReleaseObject()
     end
 end
 
@@ -351,18 +362,23 @@ function ZO_DailyLoginRewards_Gamepad:OnPreviewShown()
     local scrollData = self.gridListPanelList:GetData()
     local selectedReward = scrollData[self.currentRewardPreviewIndex]
     self:UpdatePreview(selectedReward.data)
+    ITEM_PREVIEW_GAMEPAD:RegisterCallback("RefreshActions", function()
+        SCREEN_NARRATION_MANAGER:QueueCustomEntry("dailyLoginRewardsPreview")
+    end)
 end
 
 function ZO_DailyLoginRewards_Gamepad:UpdatePreview(rewardData)
     SYSTEMS:GetObject("itemPreview"):ClearPreviewCollection()
     SYSTEMS:GetObject("itemPreview"):PreviewReward(rewardData:GetRewardId())
     self:RefreshTooltip(rewardData)
+    SCREEN_NARRATION_MANAGER:QueueCustomEntry("dailyLoginRewardsPreview")
 end
 
 function ZO_DailyLoginRewards_Gamepad:OnPreviewHiding()
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.previewKeybindStripDesciptor)
     self.currentRewardPreviewIndex = 0
     GAMEPAD_TOOLTIPS:ClearLines(GAMEPAD_RIGHT_TOOLTIP)
+    ITEM_PREVIEW_GAMEPAD:UnregisterCallback("RefreshActions")
 end
 
 function ZO_DailyLoginRewards_Gamepad:OnPreviewHidden()

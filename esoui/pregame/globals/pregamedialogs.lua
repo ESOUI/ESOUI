@@ -1534,3 +1534,111 @@ ESO_Dialogs["EULA_DECLINED"] =
     }
 }
 
+ESO_Dialogs["ADDITIONAL_CONTENT_ENTITLEMENT_WAIT"] =
+{
+    canQueue = true,
+    onlyQueueOnce = true,
+    gamepadInfo =
+    {
+        dialogType = GAMEPAD_DIALOGS.BASIC,
+    },
+    setup = function(dialog)
+        -- Expire the dialog in 5 seconds
+        dialog.expireTime = GetFrameTimeSeconds() + 5;
+        dialog:setupFunc()
+    end,
+    title =
+    {
+        text = SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_HEADER,
+    },
+    mainText =
+    {
+        text = SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_PROMPT,
+    },
+    mustChoose = true,
+    updateFn = function(dialog, currentTime)
+        if currentTime > dialog.expireTime then
+            ZO_Dialogs_ReleaseDialog("ADDITIONAL_CONTENT_ENTITLEMENT_WAIT")
+            GAME_STARTUP_GAMEPAD:CheckForAdditionalContent()
+        end
+    end,
+    buttons = {}
+}
+
+-- Mock PlayGo Dialog for PC Debugging
+ESO_Dialogs["PLAYGO_ACCEPT_CONFIRMATION"] =
+{
+    canQueue = true,
+    onlyQueueOnce = true,
+    gamepadInfo =
+    {
+        dialogType = GAMEPAD_DIALOGS.BASIC,
+    },
+    title =
+    {
+        text = SI_ACCEPT_PLAYGO_TERMS_HEADER,
+    },
+    mainText =
+    {
+        text = SI_ACCEPT_PLAYGO_TERMS_PROMPT,
+    },
+    buttons =
+    {
+        {
+            text = SI_DIALOG_YES,
+            keybind = "DIALOG_PRIMARY",
+            callback = function(dialog)
+                MockOpenStreamingInstallLanguageChunkPlatformDialogResult(PLATFORM_DIALOG_RESULT_OK)
+            end,
+        },
+        {
+            text = SI_DIALOG_NO,
+            keybind = "DIALOG_NEGATIVE",
+            callback = function(dialog)
+                MockOpenStreamingInstallLanguageChunkPlatformDialogResult(PLATFORM_DIALOG_RESULT_USER_CANCELED)
+            end,
+        },
+    }
+}
+
+-- Mock Store Dialog for PC Debugging
+ESO_Dialogs["ADDITIONAL_CONTENT_PURCHASE_CONFIRMATION"] =
+{
+    canQueue = true,
+    onlyQueueOnce = true,
+    gamepadInfo =
+    {
+        dialogType = GAMEPAD_DIALOGS.BASIC,
+    },
+    title =
+    {
+        text = SI_ADDITIONAL_CONTENT_PURCHASE_HEADER,
+    },
+    mainText =
+    {
+        text = SI_ADDITIONAL_CONTENT_PURCHASE_PROMPT,
+    },
+    buttons =
+    {
+        {
+            text = SI_DIALOG_YES,
+            keybind = "DIALOG_PRIMARY",
+            callback = function(dialog)
+                ZO_Dialogs_ShowPlatformDialog("ADDITIONAL_CONTENT_ENTITLEMENT_WAIT")
+                SetCanMockDownloadContent(true)
+                zo_callLater(function()
+                    ZO_Dialogs_ReleaseDialog("ADDITIONAL_CONTENT_ENTITLEMENT_WAIT")
+                    GAME_STARTUP_GAMEPAD:CheckForAdditionalContent()
+                    GAME_STARTUP_GAMEPAD:ForceListRebuild()
+                end, 2000)
+            end,
+        },
+        {
+            text = SI_DIALOG_NO,
+            keybind = "DIALOG_NEGATIVE",
+            callback = function(dialog)
+                ZO_Dialogs_ShowPlatformDialog("ADDITIONAL_CONTENT_ENTITLEMENT_WAIT")
+            end,
+        },
+    }
+}

@@ -1,13 +1,14 @@
 ZO_ACTIVITY_FINDER_SORT_PRIORITY =
 {
     GROUP = 0,
-    GROUP_FINDER = 100,
-    TIMED_ACTIVITIES = 200,
-    ZONE_STORIES = 300,
-    DUNGEONS = 400,
-    BATTLEGROUNDS = 500,
-    TRIBUTE = 600,
-    HOUSE_TOURS = 700,
+    PROMOTIONAL_EVENTS = 100,
+    GROUP_FINDER = 200,
+    TIMED_ACTIVITIES = 300,
+    ZONE_STORIES = 400,
+    DUNGEONS = 500,
+    BATTLEGROUNDS = 600,
+    TRIBUTE = 700,
+    HOUSE_TOURS = 800,
 }
 
 local function LFGSort(entry1, entry2)
@@ -90,7 +91,7 @@ function ActivityFinderRoot_Manager:Initialize()
             conciseFormatter = SI_LFG_LOCK_REASON_QUEUE_COOLDOWN_CONCISE,
             verboseFormatter = SI_LFG_LOCK_REASON_QUEUE_COOLDOWN_VERBOSE,
         },
-        [LFG_COOLDOWN_BATTLEGROUND_DESERTED] =
+        [LFG_COOLDOWN_BATTLEGROUND_DESERTED_QUEUE] =
         {
             isOnCooldown = false,
             expiresAtS = 0,
@@ -203,6 +204,10 @@ function ActivityFinderRoot_Manager:RegisterForEvents()
         self:MarkDataDirty()
         self:FireCallbacks("OnQuestsChanged")
     end
+    
+    local function OnDisabledActivitiesUpdate()
+        self:UpdateLocationData()
+    end
 
     EVENT_MANAGER:RegisterForEvent("ActivityFinderRoot_Manager", EVENT_ACTIVITY_FINDER_STATUS_UPDATE, function(eventCode, ...) self:OnActivityFinderStatusUpdate(...) end)
     EVENT_MANAGER:RegisterForEvent("ActivityFinderRoot_Manager", EVENT_ACTIVITY_FINDER_COOLDOWNS_UPDATE, OnCooldownsUpdate)
@@ -236,6 +241,7 @@ function ActivityFinderRoot_Manager:RegisterForEvents()
     end)
     EVENT_MANAGER:RegisterForEvent("ActivityFinderRoot_Manager", EVENT_GROUP_UPDATE, UpdateGroupStatus)
     EVENT_MANAGER:RegisterForEvent("ActivityFinderRoot_Manager", EVENT_LEADER_UPDATE, UpdateGroupStatus)
+    EVENT_MANAGER:RegisterForEvent("ActivityFinderRoot_Manager", EVENT_DISABLED_ACTIVITIES_UPDATE, OnDisabledActivitiesUpdate)
     EVENT_MANAGER:RegisterForUpdate("ActivityFinderRoot_Manager", 0, function() self:OnUpdate() end)
 end
 
@@ -401,6 +407,8 @@ function ActivityFinderRoot_Manager:UpdateLocationData()
                         local championPointsMin, championPointsMax = location:GetChampionPointsRange()
                         location:SetLockReasonText(GetLevelOrChampionPointsRequirementText(levelMin, levelMax, championPointsMin, championPointsMax))
                         location:SetCountsForAverageRoleTime(false)
+                    elseif location:IsDisabled() then
+                        location:SetLockReasonText(SI_ACTIVITY_FINDER_ACTIVITY_DISABLED)
                     elseif activityType == LFG_ACTIVITY_TRIBUTE_COMPETITIVE and not HasActiveCampaignStarted() then
                         location:SetLockReasonText(SI_TRIBUTE_FINDER_LOCKED_NO_CAMPAIGN_TEXT)
                     elseif ZO_GroupFinder_IsGroupFinderInUse() then

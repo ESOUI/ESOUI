@@ -946,6 +946,19 @@ local AlertHandlers =
         return ALERT, GetString(SI_BATTLEGROUND_INACTIVITY_WARNING), SOUNDS.BATTLEGROUND_INACTIVITY_WARNING
     end,
 
+    [EVENT_BATTLEGROUND_MMR_LOSS_REDUCED] = function(blockingReason)
+        local message
+        if ZO_FlagHelpers.MaskHasFlag(blockingReason, BG_MMR_BONUS_JOIN_IN_PROGRESS) then
+            message = GetString(SI_BATTLEGROUND_NOTICE_MMR_REDUCED_FOR_LATE_JOIN)
+        elseif ZO_FlagHelpers.MaskHasFlag(blockingReason, BG_MMR_BONUS_LFM_REQUESTED) then
+            message = GetString(SI_BATTLEGROUND_NOTICE_MMR_REDUCED_FOR_PLAYER_DROP)
+        else
+            message = GetString(SI_BATTLEGROUND_NOTICE_MMR_REDUCED)
+        end
+
+        return ALERT, message, SOUNDS.BATTLEGROUND_INACTIVITY_WARNING
+    end,
+
     [EVENT_CRAFT_FAILED] = function(result)
         return ALERT, GetString("SI_TRADESKILLRESULT", result)
     end,
@@ -975,6 +988,10 @@ local AlertHandlers =
 
     [EVENT_LOCKPICK_FAILED] = function(result)
         return ALERT, GetString(SI_ALERT_LOCKPICK_FAILED)
+    end,
+
+    [EVENT_LOCKPICK_BREAK_PREVENTED] = function()
+        return ALERT, GetString(SI_ALERT_LOCKPICK_BREAK_PREVENTED), SOUNDS.LOCKPICKING_BREAK_PREVENTED
     end,
 
     [EVENT_OUTFIT_RENAME_RESPONSE] = function(result, actorCategory, outfitIndex)
@@ -1220,6 +1237,10 @@ local AlertHandlers =
         if hasExpiringAttachments then
             return ALERT, GetString(SI_MAIL_ALERT_ATTACHMENTS_EXPIRING)
         elseif hasAttachments then
+            if IsNewCharacterNotificationSuppressionActive() then
+                -- Suppress this alert if the brief New Character Notification Suppression interval is active during their initial login.
+                return nil
+            end
             return ALERT, GetString(SI_MAIL_ALERT_ATTACHMENTS_AVAILABLE)
         end
     end,
