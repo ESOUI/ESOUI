@@ -3650,81 +3650,96 @@ ESO_Dialogs["CONFIRM_CANCEL_RESEARCH"] =
     }
 }
 
-ESO_Dialogs["PTP_TIMED_RESPONSE_PROMPT"] =
-{
-    canQueue = true,
-    gamepadInfo =
+do
+    local function ShouldAllowDialogWhileQueuePaused(dialogName, dialogData)
+        if dialogName == "LFG_DECLINE_READY_CHECK_CONFIRMATION" then
+            return true
+        end
+
+        if dialogName == "PTP_TIMED_RESPONSE_PROMPT" then
+            return dialogData.incomingType == ZO_INTERACT_TYPE.LFG_READY_CHECK
+        end
+
+        return false
+    end
+
+    ESO_Dialogs["PTP_TIMED_RESPONSE_PROMPT"] =
     {
-        dialogType = GAMEPAD_DIALOGS.BASIC,
-    },
-    title =
-    {
-        text = function(dialog)
-            return dialog.data.dialogTitle
-        end,
-    },
-    mainText =
-    {
-        text = function(dialog)
-            return ZO_PlayerToPlayer_GetIncomingEntryDisplayText(dialog.data)
-        end,
-    },
-    buttons =
-    {
+        canQueue = true,
+        gamepadInfo =
         {
-            onShowCooldown = 2000,
-            keybind = "DIALOG_TERTIARY",
-            gamepadPreferredKeybind = "DIALOG_PRIMARY",
+            dialogType = GAMEPAD_DIALOGS.BASIC,
+        },
+        title =
+        {
             text = function(dialog)
-                local dialogData = dialog.data
-                return dialogData.acceptText or GetString(SI_DIALOG_ACCEPT)
-            end,
-            callback = function(dialog)
-                PLAYER_TO_PLAYER:Accept(dialog.data)
-                ZO_Dialogs_SetDialogQueuePaused(false)
-            end,
-            visible = function(dialog)
-                return PLAYER_TO_PLAYER:ShouldShowAccept(dialog.data)
+                return dialog.data.dialogTitle
             end,
         },
+        mainText =
         {
-            onShowCooldown = 2000,
-            keybind = "DIALOG_RESET",
-            gamepadPreferredKeybind = "DIALOG_NEGATIVE",
             text = function(dialog)
-                local dialogData = dialog.data
-                return dialogData.declineText or GetString(SI_DIALOG_DECLINE)
+                return ZO_PlayerToPlayer_GetIncomingEntryDisplayText(dialog.data)
             end,
-            callback = function(dialog)
-                if dialog.data.incomingType == ZO_INTERACT_TYPE.LFG_READY_CHECK then
-                    ZO_Dialogs_ShowPlatformDialog("LFG_DECLINE_READY_CHECK_CONFIRMATION", dialog.data)
-                elseif dialog.data.declineCallback then
-                    dialog.data.declineCallback()
-                end
-            end,
-            visible = function(dialog)
-                return PLAYER_TO_PLAYER:ShouldShowDecline(dialog.data)
-            end,
-        }
-    },
-    updateFn = function(dialog)
-        ZO_Dialogs_RefreshDialogText("PTP_TIMED_RESPONSE_PROMPT", dialog)
-
-        local dialogData = dialog.data
-        if dialogData.incomingType == ZO_INTERACT_TYPE.LFG_READY_CHECK and not ZO_Dialogs_IsDialogQueuePaused() then
-            local EXEMPTION_LIST =
+        },
+        buttons =
+        {
             {
-                "LFG_DECLINE_READY_CHECK_CONFIRMATION",
+                onShowCooldown = 2000,
+                keybind = "DIALOG_TERTIARY",
+                gamepadPreferredKeybind = "DIALOG_PRIMARY",
+                text = function(dialog)
+                    local dialogData = dialog.data
+                    return dialogData.acceptText or GetString(SI_DIALOG_ACCEPT)
+                end,
+                callback = function(dialog)
+                    PLAYER_TO_PLAYER:Accept(dialog.data)
+                    ZO_Dialogs_SetDialogQueuePaused(false)
+                end,
+                visible = function(dialog)
+                    return PLAYER_TO_PLAYER:ShouldShowAccept(dialog.data)
+                end,
+            },
+            {
+                onShowCooldown = 2000,
+                keybind = "DIALOG_RESET",
+                gamepadPreferredKeybind = "DIALOG_NEGATIVE",
+                text = function(dialog)
+                    local dialogData = dialog.data
+                    return dialogData.declineText or GetString(SI_DIALOG_DECLINE)
+                end,
+                callback = function(dialog)
+                    if dialog.data.incomingType == ZO_INTERACT_TYPE.LFG_READY_CHECK then
+                        ZO_Dialogs_ShowPlatformDialog("LFG_DECLINE_READY_CHECK_CONFIRMATION", dialog.data)
+                    elseif dialog.data.declineCallback then
+                        dialog.data.declineCallback()
+                    end
+                end,
+                visible = function(dialog)
+                    return PLAYER_TO_PLAYER:ShouldShowDecline(dialog.data)
+                end,
             }
-            ZO_Dialogs_SetDialogQueuePaused(true, EXEMPTION_LIST)
-        end
+        },
+        updateFn = function(dialog)
+            if dialog.hiding then
+                -- when shown as a gamepad dialog, this update function can get called after the dialog starts hiding
+                -- without this check we can end up calling ZO_Dialogs_SetDialogQueuePaused(true) instead of leaving it as false
+                return
+            end
+            ZO_Dialogs_RefreshDialogText("PTP_TIMED_RESPONSE_PROMPT", dialog)
 
-        if dialogData.expirationCallback and GetFrameTimeSeconds() > dialogData.expiresAtS then
-            dialogData.expirationCallback()
-            ZO_Dialogs_SetDialogQueuePaused(false)
-        end
-    end,
-}
+            local dialogData = dialog.data
+            if dialogData.incomingType == ZO_INTERACT_TYPE.LFG_READY_CHECK and not ZO_Dialogs_IsDialogQueuePaused() then
+                ZO_Dialogs_SetDialogQueuePaused(true, ShouldAllowDialogWhileQueuePaused)
+            end
+
+            if dialogData.expirationCallback and GetFrameTimeSeconds() > dialogData.expiresAtS then
+                dialogData.expirationCallback()
+                ZO_Dialogs_SetDialogQueuePaused(false)
+            end
+        end,
+    }
+end
 
 ESO_Dialogs["CONFIRM_ENCHANT_LOCKED_ITEM"] =
 {

@@ -174,7 +174,7 @@ SafeAddString(SI_ACTIVITYQUEUERESULT9, "Los roles de los miembros de este grupo 
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_DESCRIPTION, "Puedes desbloquear |cffffff<<1>>|r <<1[espacio/espacios]>> de personaje adicionales desde la Tienda de coronas.", 0)
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_HEADER, "Espacios de personaje adicionales", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_HEADER, "No tienes el paquete de voces", 0)
-SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "No tienes descargado el paquete de voces seleccionado. Pulsa «|cffffffDescargar|r» para ir a la PlayStation Store, donde podrás conseguir el paquete seleccionado.", 0)
+SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "No tienes descargado el paquete de voces seleccionado. Pulsa «|cffffffDescargar|r» para ir a la PlayStation®Store, donde podrás conseguir el paquete seleccionado.", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONTINUE, "Continuar", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_DOWNLOAD, "Descargar", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_HEADER, "Esperando...", 0)

@@ -15,8 +15,12 @@ local ZO_OptionsPanel_Interface_ControlData =
                 local validValues = {}
                 for i = OFFICIAL_LANGUAGE_ITERATION_BEGIN, OFFICIAL_LANGUAGE_ITERATION_END do
                     if ZoIsOfficialLanguageSupported(i) then
-                        table.insert(validValues, i)
+                        table.insert(validValues, BCP47StringForZoOfficialLanguage(i))
                     end
+                end
+                local language = GetCVar("Language.2")
+                if language ~= ZoGetOfficialGameLanguageDescriptor() then
+                    table.insert(validValues, language)
                 end
                 return validValues
             end,
@@ -26,6 +30,10 @@ local ZO_OptionsPanel_Interface_ControlData =
                     if ZoIsOfficialLanguageSupported(i) then
                         table.insert(valueStrings, function() return GetString("SI_OFFICIALLANGUAGE", i) end)
                     end
+                end
+                local language = GetCVar("Language.2")
+                 if language ~= ZoGetOfficialGameLanguageDescriptor() then
+                    table.insert(valueStrings, function() return GetString(SI_INTERFACE_OPTIONS_LANGUAGE_CUSTOM) end)
                 end
                 return valueStrings
             end,

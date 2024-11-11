@@ -174,7 +174,7 @@ SafeAddString(SI_ACTIVITYQUEUERESULT9, "Les rôles des membres de ce groupe sont
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_DESCRIPTION, "Vous pouvez déverrouiller |cffffff<<1>>|r <<1[emplacement/emplacements]>> supplémentaires dans la Boutique à Couronnes.", 0)
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_HEADER, "Emplacements de personnages supplémentaires", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_HEADER, "Vous ne possédez pas ce pack de langue", 0)
-SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "Vous n'avez pas téléchargé ce pack de langue. Sélectionnez |cfffffftélécharger|r pour accéder au PlayStation Store où vous pourrez télécharger le pack de langue en question.", 0)
+SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "Vous n'avez pas téléchargé ce pack de langue. Sélectionnez |cfffffftélécharger|r pour accéder au PlayStation®Store où vous pourrez télécharger le pack de langue en question.", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONTINUE, "Continuer", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_DOWNLOAD, "Télécharger", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_HEADER, "Attente…", 0)

@@ -174,7 +174,7 @@ SafeAddString(SI_ACTIVITYQUEUERESULT9, "The members of this group are role incom
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_DESCRIPTION, "You can unlock |cffffff<<1>>|r additional character <<1[slot/slots]>> in the Crown Store.", 0)
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_HEADER, "Additional Character Slots", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_HEADER, "Voice Over Pack Not Owned", 0)
-SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "You do not have the selected voice over pack downloaded. Pressing |cffffffdownload|r will take you to the PlayStation Store where you can download the selected pack.", 0)
+SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "You do not have the selected voice over pack downloaded. Pressing |cffffffdownload|r will take you to the PlayStation®Store where you can download the selected pack.", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONTINUE, "Continue", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_DOWNLOAD, "Download", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_HEADER, "Waiting…", 0)

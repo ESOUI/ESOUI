@@ -10,7 +10,7 @@ local BUTTON_SPACING = 20
 local g_displayedDialog = nil
 local g_dialogQueue = {}
 local g_isDialogQueuePaused = false
-local g_dialogPauseExemptions = {}
+local g_dialogPauseExemptionsListOrFunction = nil
 local g_currencyPool = nil
 local g_curInstanceId = 0
 
@@ -447,7 +447,7 @@ function ZO_Dialogs_ShowDialog(name, data, textParams, isGamepad)
     local queueInFront = false
     if g_isDialogQueuePaused then
         forceQueueDialog = true
-        if ZO_IsElementInNumericallyIndexedTable(g_dialogPauseExemptions, name) then
+        if ZO_Dialogs_IsDialogExemptFromDialogQueuePause(name, data) then
             forceQueueDialog = false
             queueInFront = true
         end
@@ -951,20 +951,32 @@ function ZO_Dialogs_IsDialogQueuePaused()
     return g_isDialogQueuePaused
 end
 
-function ZO_Dialogs_SetDialogQueuePaused(isPaused, exemptionList)
+function ZO_Dialogs_SetDialogQueuePaused(isPaused, exemptionListOrFunction)
     if isPaused ~= g_isDialogQueuePaused then
         g_isDialogQueuePaused = isPaused
         if isPaused then
-            g_dialogPauseExemptions = exemptionList
+            g_dialogPauseExemptionsListOrFunction = exemptionListOrFunction
         else
             -- Show next dialog in queue
             local queuedDialog = table.remove(g_dialogQueue, 1)
             if queuedDialog then
                 ZO_Dialogs_ShowDialog(unpack(queuedDialog))
             end
-            ZO_ClearNumericallyIndexedTable(g_dialogPauseExemptions)
+            g_dialogPauseExemptionsListOrFunction = nil
         end
     end
+end
+
+function ZO_Dialogs_IsDialogExemptFromDialogQueuePause(dialogName, dialogData)
+    if type(g_dialogPauseExemptionsListOrFunction) == "table" then
+        return ZO_IsElementInNumericallyIndexedTable(g_dialogPauseExemptionsListOrFunction, dialogName)
+    end
+
+    if type(g_dialogPauseExemptionsListOrFunction) == "function" then
+        return g_dialogPauseExemptionsListOrFunction(dialogName, dialogData)
+    end
+
+    return false
 end
 
 function ZO_CompleteReleaseDialogOnDialogHidden(dialog, releasedFromButton)
@@ -1021,7 +1033,7 @@ function ZO_CompleteReleaseDialogOnDialogHidden(dialog, releasedFromButton)
 
     local _, queuedDialog = next(g_dialogQueue)
     if queuedDialog then
-        if not g_isDialogQueuePaused or ZO_IsElementInNumericallyIndexedTable(g_dialogPauseExemptions, queuedDialog[QUEUED_DIALOG_INDEX_NAME]) then
+        if not g_isDialogQueuePaused or ZO_Dialogs_IsDialogExemptFromDialogQueuePause(queuedDialog[QUEUED_DIALOG_INDEX_NAME], queuedDialog[QUEUED_DIALOG_INDEX_DATA]) then
             -- Show next dialog in queue
             table.remove(g_dialogQueue, 1)
             ZO_Dialogs_ShowDialog(unpack(queuedDialog))

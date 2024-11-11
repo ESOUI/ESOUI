@@ -174,7 +174,7 @@ SafeAddString(SI_ACTIVITYQUEUERESULT9, "このグループのメンバーはロ�
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_DESCRIPTION, "クラウンストアで追加キャラクターを|cffffff<<1>>|r人(<<1[スロット/スロット]>>)解除できます。", 0)
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_HEADER, "追加キャラクタースロット", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_HEADER, "ボイスオーバーパック未所持", 0)
-SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "選択されたボイスオーバーパックをダウンロードしていません。|cffffffダウンロード|rを押すとPlayStation Storeに移動し、そこから選択したパックをダウンロードできます。", 0)
+SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "選択されたボイスオーバーパックをダウンロードしていません。|cffffffダウンロード|rを押すとPlayStation®Storeに移動し、そこから選択したパックをダウンロードできます。", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONTINUE, "続行", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_DOWNLOAD, "ダウンロード", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_HEADER, "待機中…", 0)
