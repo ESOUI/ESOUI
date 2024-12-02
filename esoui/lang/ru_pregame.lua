@@ -174,7 +174,7 @@ SafeAddString(SI_ACTIVITYQUEUERESULT9, "У членов этой группы н
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_DESCRIPTION, "В кронном магазине вы можете купить еще |cffffff<<1>>|r <<1[ячейку/ячейки/ячеек]>> персонажа.", 0)
 SafeAddString(SI_ADDITIONAL_CHARACTER_SLOTS_HEADER, "Дополнительные ячейки персонажей", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_HEADER, "Отсутствует пакет озвучения", 0)
-SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "Выбранный пакет озвучения не загружен на ваше устройство. Нажав |cffffff«Загрузить»|r, вы будете перенаправлены в PlayStation®Store, откуда сможете загрузить выбранный пакет.", 0)
+SafeAddString(SI_ADDITIONAL_CONTENT_CONSOLE_VO_INFO_PROMPT, "Выбранный пакет озвучения не загружен на ваше устройство. Нажав |cffffff«Загрузить»|r, вы будете перенаправлены в PlayStation Store, откуда сможете загрузить выбранный пакет.", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_CONTINUE, "Продолжить", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_DOWNLOAD, "Загрузить", 0)
 SafeAddString(SI_ADDITIONAL_CONTENT_ENTITLEMENT_WAIT_HEADER, "Ожидание…", 0)

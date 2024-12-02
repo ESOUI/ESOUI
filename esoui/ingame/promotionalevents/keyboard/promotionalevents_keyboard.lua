@@ -412,7 +412,7 @@ function ZO_PromotionalEvents_Keyboard:OnHiding()
     ZO_PromotionalEvents_Shared.OnHiding(self)
 
     KEYBIND_STRIP:RemoveKeybindButtonGroup(self.keybindStripDescriptor)
-    SCENE_MANAGER:RemoveFragment(ITEM_PREVIEW_KEYBOARD:GetFragment())
+    SCENE_MANAGER:RemoveFragmentImmediately(ITEM_PREVIEW_KEYBOARD:GetFragment())
     SCENE_MANAGER:RemoveFragment(PROMOTIONAL_EVENTS_PREVIEW_OPTIONS_FRAGMENT)
     ITEM_PREVIEW_KEYBOARD:OnPreviewHidden()
 end
