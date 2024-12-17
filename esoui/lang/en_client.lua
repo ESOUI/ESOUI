@@ -6120,6 +6120,7 @@ SafeAddString(SI_INTERFACE_OPTIONS_INTERACTABLE_GLOWS_ENABLED_TOOLTIP, "Displays
 SafeAddString(SI_INTERFACE_OPTIONS_INTERACTABLE_GLOWS_INTENSITY, "Glow Intensity", 1)
 SafeAddString(SI_INTERFACE_OPTIONS_INTERACTABLE_GLOWS_INTENSITY_TOOLTIP, "Adjusts the intensity of the glow around interactable objects.", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE, "Language", 0)
+SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE_CUSTOM, "Custom", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE_USE_PROFANITY_FILTER, "Profanity Filter", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE_USE_PROFANITY_FILTER_TOOLTIP, "Filters out profanity in all player-written text in chat, email subjects and bodies, guild messages, and more.", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LIMIT_FOLLOWERS_IN_TOWNS, "Limit Followers in Towns", 0)

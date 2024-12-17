@@ -6120,6 +6120,7 @@ SafeAddString(SI_INTERFACE_OPTIONS_INTERACTABLE_GLOWS_ENABLED_TOOLTIP, "Muestra 
 SafeAddString(SI_INTERFACE_OPTIONS_INTERACTABLE_GLOWS_INTENSITY, "Intensidad de brillo", 1)
 SafeAddString(SI_INTERFACE_OPTIONS_INTERACTABLE_GLOWS_INTENSITY_TOOLTIP, "Ajusta la intensidad del brillo de los objetos con los que se puede interactuar.", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE, "Idioma", 0)
+SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE_CUSTOM, "Personalizado", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE_USE_PROFANITY_FILTER, "Usar filtro de lenguaje inapropiado", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LANGUAGE_USE_PROFANITY_FILTER_TOOLTIP, "Filtra todo tipo de lenguaje inapropiado escrito por jugadores en el chat, en el asunto y cuerpo de correos, mensajes de gremio, etc.", 0)
 SafeAddString(SI_INTERFACE_OPTIONS_LIMIT_FOLLOWERS_IN_TOWNS, "Limitar seguidores en ciudades", 0)
