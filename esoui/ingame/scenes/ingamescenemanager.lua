@@ -78,7 +78,6 @@ function ZO_IngameSceneManager:SetInUIMode(inUIMode, bypassHideSceneConfirmation
                             self.manuallyEnteredHUDUIMode = nil
                             EndLooting()
                             SetGameCameraUIMode(false)
-                            ZO_ChatSystem_ExitChat()
                             self:HideTopLevels()
                             DIRECTIONAL_INPUT:Deactivate(self)
                             MAIN_MENU_MANAGER:ForceClearBlockingScenes()
@@ -630,7 +629,7 @@ function ZO_IngameSceneManager:OnToggleGameMenuBinding()
     end
 
     --System Menu Toggle
-    if not (topLevelHidden or baseSceneShown) then
+    if not (topLevelHidden or baseSceneShown) and ZO_IsPCUI() then
         SCENE_MANAGER:Toggle("gameMenuInGame")
     end
 end

@@ -70,8 +70,9 @@ end
 function ZO_SkillStyleIconSelector_Keyboard:OnSkillStyleSelectorEntrySetup(control, data)
     local iconContainer = control:GetNamedChild("IconContainer")
     local checkButton = iconContainer:GetNamedChild("Frame")
-    local lockIcon = iconContainer:GetNamedChild("Lock")
+    local lockIcon = control:GetNamedChild("Lock")
     local selectedBorder = iconContainer:GetNamedChild("SelectedBorder")
+    local icon = iconContainer:GetNamedChild("Icon")
 
     local isLocked = data.collectibleData:IsLocked() or data.collectibleData:IsBlocked()
     lockIcon:SetHidden(not isLocked)
@@ -86,14 +87,14 @@ function ZO_SkillStyleIconSelector_Keyboard:OnSkillStyleSelectorEntrySetup(contr
         self:OnSkillStyleSelectorGridListEntryClicked(data.iconIndex)
     end
 
-    if not self.skillData.isPurchased then
+    if data.collectibleData:IsLocked() then
         iconContainer:SetAlpha(0.3)
     else
         iconContainer:SetAlpha(1)
     end
 
     control.data = data
-    iconContainer:GetNamedChild("Icon"):SetTexture(data.collectibleData:GetIcon())
+    icon:SetTexture(data.collectibleData:GetIcon())
     ZO_CheckButton_SetCheckState(checkButton, isCurrent)
     ZO_CheckButton_SetToggleFunction(checkButton, OnClick)
     ZO_CheckButton_SetEnableState(checkButton, not isLocked)

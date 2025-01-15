@@ -96,22 +96,21 @@ function GroupMenu_Keyboard:InitializeCategories()
             iconTexture = not enabled and categoryData.disabledIcon or iconTexture
             control.icon:SetTexture(iconTexture)
             control.iconHighlight:SetTexture(categoryData.mouseoverIcon)
-            control.statusIcon = control:GetNamedChild("StatusIcon")
+            local statusIcon = control.statusIcon or control:GetNamedChild("StatusIcon")
+            control.statusIcon = statusIcon
+            statusIcon:ClearIcons()
 
             if categoryData.isPromotionalEvent then
                 control.text.GetTextColor = GetPromotionalEventTextColor
 
-                local campaignData = PROMOTIONAL_EVENT_MANAGER:GetCurrentCampaignData()
-                if campaignData and not IsPromotionalEventSystemLocked() and (not campaignData:HasBeenSeen() or campaignData:IsAnyRewardClaimable()) then
-                    control.statusIcon:AddIcon(ZO_KEYBOARD_NEW_ICON)
-                    control.statusIcon:Show()
-                else
-                    control.statusIcon:ClearIcons()
+                if PROMOTIONAL_EVENT_MANAGER:DoesAnyCampaignHaveCallout() then
+                    statusIcon:AddIcon(ZO_KEYBOARD_NEW_ICON)
                 end
             else
                 ZO_SelectableLabel_ResetColorFunctionToDefault(control.text)
-                control.statusIcon:ClearIcons()
             end
+
+            statusIcon:Show()
 
             ZO_IconHeader_Setup(control, open, enabled)
         end
@@ -148,12 +147,15 @@ function GroupMenu_Keyboard:InitializeCategories()
         SetupNode(node, control, categoryData, open)
 
         if node.enabled and open and userRequested then
-            self.navigationTree:SelectFirstChild(node)
+            local selectedNode = self.navigationTree:GetSelectedNode()
+            if not selectedNode or selectedNode.parentNode ~= node then
+                self.navigationTree:SelectFirstChild(node)
+            end
         end
 
         if categoryData.isGroupFinder then
             control.statusIcon = control:GetNamedChild("StatusIcon")
-            if ZO_HasGroupFinderNewApplication() then
+            if GROUP_FINDER_APPLICATIONS_LIST_MANAGER:HasNewApplication() then
                 control.statusIcon:AddIcon(ZO_KEYBOARD_NEW_ICON)
                 control.statusIcon:Show()
             else
@@ -177,15 +179,21 @@ function GroupMenu_Keyboard:InitializeCategories()
             end
 
             if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
-                if self.currentCategoryFragment then
-                    SCENE_MANAGER:RemoveFragment(self.currentCategoryFragment)
-                end
+                if self.currentCategoryFragment == categoryData.categoryFragment then
+                    if categoryData.onTreeEntrySelected then
+                        categoryData.onTreeEntrySelected(categoryData)
+                    end
+                else
+                    if self.currentCategoryFragment then
+                        SCENE_MANAGER:RemoveFragment(self.currentCategoryFragment)
+                    end
 
-                -- Order matters:
-                if categoryData.onTreeEntrySelected then
-                    categoryData.onTreeEntrySelected(categoryData)
+                    -- Order matters:
+                    if categoryData.onTreeEntrySelected then
+                        categoryData.onTreeEntrySelected(categoryData)
+                    end
+                    SCENE_MANAGER:AddFragment(categoryData.categoryFragment)
                 end
-                SCENE_MANAGER:AddFragment(categoryData.categoryFragment)
             end
 
             self.currentCategoryFragment = categoryData.categoryFragment
@@ -362,7 +370,7 @@ do
         local node = self.navigationTree:AddNode(nodeTemplate, nodeData, parentNode)
         if nodeData.categoryFragment then
             local existingFragmentNode = self.categoryFragmentToNodeLookup[nodeData.categoryFragment]
-            if not existingFragmentNode or existingFragmentNode:GetData().priority > nodeData.priority then
+            if not existingFragmentNode or nodeData.priority < existingFragmentNode:GetData().priority then
                 self.categoryFragmentToNodeLookup[nodeData.categoryFragment] = node
             end
         end
@@ -405,7 +413,7 @@ do
                     children = nodeData.getChildrenFunction()
                 end
 
-                if children then
+                if children and #children > 0 then
                     self:AddCategoryTreeNodes(children, node)
                 end
             end
