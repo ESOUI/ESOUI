@@ -1652,6 +1652,7 @@ SafeAddString(SI_CLIENTINTERACTRESULT25, "Vous ne pouvez pas faire cela en plein
 SafeAddString(SI_CLIENTINTERACTRESULT26, "Vous ne pouvez pas voler cet objet en raison de l'option Empêcher le vol des objet placés.", 0)
 SafeAddString(SI_CLIENTINTERACTRESULT27, "L'Écriture est actuellement désactivée.", 0)
 SafeAddString(SI_CLIENTINTERACTRESULT28, "L'Écriture est actuellement indisponible. Essayez de vous reconnecter et contactez le Service client si le problème persiste.", 0)
+SafeAddString(SI_CLIENTINTERACTRESULT29, "Impossible de faire ceci pendant cette campagne.", 0)
 SafeAddString(SI_CLIENTINTERACTRESULT3, "Le verrou d'un <<1>> est trop difficile à crocheter.", 0)
 SafeAddString(SI_CLIENTINTERACTRESULT4, "Vous n'avez ni clef, ni crochet pour déverrouiller un <<1>>.", 0)
 SafeAddString(SI_CLIENTINTERACTRESULT6, "Vous n'avez pas d'appât.", 0)

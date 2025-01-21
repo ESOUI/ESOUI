@@ -1422,13 +1422,13 @@ function ZO_GamepadCollectionsBook:RefreshRightPanel(entryData)
     if self.pendingUtilityWheelCollectibleData then
         -- Don't cover the wheel if it's open.
         return
-    elseif entryData ~= nil and entryData.dataSource:IsInstanceOf(ZO_CollectibleCategoryData) then
-        self:UpdateGridPanelVisibility(entryData)
-        SCENE_MANAGER:RemoveFragment(GAMEPAD_COLLECTIONS_BOOK_DLC_PANEL_FRAGMENT)
-        SCENE_MANAGER:RemoveFragment(GAMEPAD_COLLECTIONS_BOOK_HOUSING_PANEL_FRAGMENT)
-        GAMEPAD_TOOLTIPS:ClearTooltip(GAMEPAD_LEFT_TOOLTIP)
     elseif entryData then
-        if entryData.dataSource:IsInstanceOf(ZO_RandomMountCollectibleData) then
+        if entryData.dataSource:IsInstanceOf(ZO_CollectibleCategoryData) then
+            self:UpdateGridPanelVisibility(entryData)
+            SCENE_MANAGER:RemoveFragment(GAMEPAD_COLLECTIONS_BOOK_DLC_PANEL_FRAGMENT)
+            SCENE_MANAGER:RemoveFragment(GAMEPAD_COLLECTIONS_BOOK_HOUSING_PANEL_FRAGMENT)
+            GAMEPAD_TOOLTIPS:ClearTooltip(GAMEPAD_LEFT_TOOLTIP)
+        elseif entryData.dataSource:IsInstanceOf(ZO_RandomMountCollectibleData) then
             self:RefreshRandomMountTooltip(entryData)
         elseif entryData:IsStory() then
             self:RefreshDLCTooltip(entryData)
@@ -1574,11 +1574,11 @@ function ZO_GamepadCollectionsBook:UpdateGridPanelVisibility(categoryData)
     if shouldFrameRight ~= self.shouldFrameRight then
         self.shouldFrameRight = shouldFrameRight
         if shouldFrameRight then
-            SCENE_MANAGER:RemoveFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD_OPTIONS)
+            SCENE_MANAGER:RemoveFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD_COLLECTIONS)
             SCENE_MANAGER:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD_RIGHT_FURTHER_AWAY)
         else
             SCENE_MANAGER:RemoveFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD_RIGHT_FURTHER_AWAY)
-            SCENE_MANAGER:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD_OPTIONS)
+            SCENE_MANAGER:AddFragmentGroup(FRAGMENT_GROUP.FRAME_TARGET_GAMEPAD_COLLECTIONS)
         end
     end
 end
