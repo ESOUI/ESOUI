@@ -1269,7 +1269,7 @@ do
             if numActiveMundusStoneBuffs >= i then
                 local buffName, _, _, buffSlot, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", activeMundusStoneBuffIndices[i])
                 local mundusStoneIndex = GetAbilityMundusStoneType(abilityId)
-                mundusEntry = ZO_GamepadEntryData:New(buffName, ZO_STAT_MUNDUS_ICONS[mundusStoneIndex])
+                mundusEntry = ZO_GamepadEntryData:New(zo_strformat(SI_STATS_MUNDUS_FORMATTER, buffName), ZO_STAT_MUNDUS_ICONS[mundusStoneIndex])
                 mundusEntry.data =
                 {
                     name = buffName,

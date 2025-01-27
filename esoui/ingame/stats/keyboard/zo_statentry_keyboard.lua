@@ -128,12 +128,10 @@ function ZO_StatEntry_Keyboard:ShowComparisonValue(statDelta, excludeDelta)
 end
 
 function ZO_StatEntry_Keyboard:HideComparisonValue()
-    if not self.control.comparisonValue:IsHidden() then
-        self.currentStatDelta = 0
-        self.control.comparisonValue:SetText("")
-        self.control.comparisonValue:SetHidden(true)
-        self.control.value:SetHidden(false)
-    end
+    self.currentStatDelta = 0
+    self.control.comparisonValue:SetText("")
+    self.control.comparisonValue:SetHidden(true)
+    self.control.value:SetHidden(false)
 end
 
 function ZO_StatsEntry_OnMouseEnter(control)
@@ -247,17 +245,17 @@ function ZO_SharedStats_SetupMundusIconControls(mundusIconControls, mouseOverAnc
             end
             control:SetHidden(false)
             if mundusStoneNameListContainsBuff or #mundusStoneNameList == 0 then
-                table.insert(mundusStoneNameList, 1, nameText)
+                table.insert(mundusStoneNameList, 1, zo_strformat(SI_STATS_MUNDUS_FORMATTER, nameText))
             end
         elseif i <= numMundusSlots then
-            local buffName, _, _, buffSlot, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", activeMundusStoneBuffIndices[i])
+            local buffName, _, _, buffSlot, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", activeMundusStoneBuffIndices[i - (numMundusSlots - numActiveMundusStoneBuffs)])
             local mundusStoneIndex = GetAbilityMundusStoneType(abilityId)
             control.buffSlot = buffSlot
             control.abilityId = abilityId
             control.icon:SetTexture(ZO_STAT_MUNDUS_ICONS[mundusStoneIndex])
             control.icon:SetColor(ZO_SELECTED_TEXT:UnpackRGBA())
             control:SetHidden(false)
-            table.insert(mundusStoneNameList, 1, buffName)
+            table.insert(mundusStoneNameList, 1, zo_strformat(SI_STATS_MUNDUS_FORMATTER, buffName))
             mundusStoneNameListContainsBuff = true
 
             local numStatsForAbility = GetAbilityNumDerivedStats(abilityId)

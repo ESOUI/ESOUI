@@ -208,6 +208,8 @@ function ZO_Stats:OnUpdate()
         end
     end
 
+    ZO_ADVANCED_STATS_WINDOW:UpdateMundusStats()
+
     if ZO_ADVANCED_STATS_WINDOW:HasAdvancedMundusStats() then
         local NO_GRAMMAR = true
         local DONT_INHERIT_COLOR = false
@@ -1281,6 +1283,7 @@ function ZO_AdvancedStats_Keyboard:InitializeList()
 end
 
 function ZO_AdvancedStats_Keyboard:SetupAdvancedStats()
+
     ZO_ScrollList_Clear(self.list)
     local scrollData = ZO_ScrollList_GetDataList(self.list)
 

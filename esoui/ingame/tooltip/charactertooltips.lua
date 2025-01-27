@@ -87,7 +87,7 @@ function ZO_Tooltip:LayoutMundusTooltip(mundusData)
 
     if mundusData.name then
         local headerSection = self:AcquireSection(self:GetStyle("title"))
-        headerSection:AddLine(mundusData.name)
+        headerSection:AddLine(zo_strformat(SI_STATS_MUNDUS_FORMATTER, mundusData.name))
         self:AddSection(headerSection)
     end
 

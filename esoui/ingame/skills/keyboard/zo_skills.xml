@@ -250,7 +250,9 @@
             </Controls>
         </TopLevelControl>
 
-        <Label name="ZO_SkillsNavigationEntry" virtual="true" font="ZoFontHeader" inherits="ZO_SelectableLabel">
+        <Label name="ZO_SkillsNavigationEntry" virtual="true" font="ZoFontHeader" inherits="ZO_SelectableTooltipIfTruncatedLabel" maxLineCount="2">
+            <Dimensions x="226" />
+            
             <OnInitialized>
                 ZO_SkillsNavigationEntry_OnInitialized(self)
             </OnInitialized>

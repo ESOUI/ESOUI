@@ -4031,7 +4031,7 @@ SafeAddString(SI_GAMEPAD_SOCIAL_LIST_FILTER_DROPDOWN_NARRATION_NAME, "Стату
 SafeAddString(SI_GAMEPAD_SOCIAL_LIST_LAST_ONLINE, "Был в сети", 1)
 SafeAddString(SI_GAMEPAD_SOCIAL_PERSONALITY, "<<1>>", 0)
 SafeAddString(SI_GAMEPAD_SOCIAL_REQUEST_EITHER_NAME_ENTRY_HEADER, "Имя персонажа или ID игрока.", 0)
-SafeAddString(SI_GAMEPAD_SORT_OPTION, "Сортировка", 0)
+SafeAddString(SI_GAMEPAD_SORT_OPTION, "Сортировать", 0)
 SafeAddString(SI_GAMEPAD_STABLE_CONFIRM_BUY_MOUNT, "Подтвердить покупку", 0)
 SafeAddString(SI_GAMEPAD_STABLE_FULLY_UPGRADED_WARNING, "Вы уже полностью улучшили этот навык.", 0)
 SafeAddString(SI_GAMEPAD_STABLE_ONCE_PER_DAY_WARNING, "Вы можете улучшить лишь один навык верховой езды в день.", 0)
