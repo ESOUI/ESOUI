@@ -1260,26 +1260,27 @@ do
             attribute:SetMundusEffect(HAS_MUNDUS_EFFECT)
         end
         self.mundusEntries = {}
+        self.mundusAdvancedStats = {}
         local activeMundusStoneBuffIndices = { GetUnitActiveMundusStoneBuffIndices("player") }
         local numActiveMundusStoneBuffs = #activeMundusStoneBuffIndices
         local numMundusSlots = GetNumAvailableMundusStoneSlots()
         local isPlayerAtMundusWarningLevel = GetUnitLevel("player") >= GetMundusWarningLevel()
-        for i = 1, numMundusSlots do
+        for slotIndex = 1, numMundusSlots do
             local mundusEntry = nil
-            if numActiveMundusStoneBuffs >= i then
-                local buffName, _, _, buffSlot, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", activeMundusStoneBuffIndices[i])
+            if numActiveMundusStoneBuffs >= slotIndex then
+                local buffName, _, _, buffSlot, _, _, _, _, _, _, abilityId = GetUnitBuffInfo("player", activeMundusStoneBuffIndices[slotIndex])
                 local mundusStoneIndex = GetAbilityMundusStoneType(abilityId)
                 mundusEntry = ZO_GamepadEntryData:New(zo_strformat(SI_STATS_MUNDUS_FORMATTER, buffName), ZO_STAT_MUNDUS_ICONS[mundusStoneIndex])
                 mundusEntry.data =
                 {
                     name = buffName,
                     description = GetAbilityEffectDescription(buffSlot),
-                    buffIndex = activeMundusStoneBuffIndices[i],
+                    buffIndex = activeMundusStoneBuffIndices[slotIndex],
                     statEffects = {},
                 }
                 local numStatsForAbility = GetAbilityNumDerivedStats(abilityId)
-                for i = 1, numStatsForAbility do
-                    local statType, effectValue = GetAbilityDerivedStatAndEffectByIndex(abilityId, i)
+                for statIndex = 1, numStatsForAbility do
+                    local statType, effectValue = GetAbilityDerivedStatAndEffectByIndex(abilityId, statIndex)
                     local attributeItem = self:GetAttributeItem(statType)
                     if attributeItem then
                         local HAS_MUNDUS_EFFECT = true
@@ -1292,19 +1293,19 @@ do
                     }
                     table.insert(mundusEntry.data.statEffects, statEffect)
                 end
-                self.mundusAdvancedStats = {}
+                self.mundusAdvancedStats[slotIndex] = {}
                 local numAdvancedStatsForAbility = GetAbilityNumAdvancedStats(abilityId)
-                for i = 1, numAdvancedStatsForAbility do
-                    local statType, statFormat, effectValue = GetAbilityAdvancedStatAndEffectByIndex(abilityId, i)
+                for advancedStatIndex = 1, numAdvancedStatsForAbility do
+                    local statType, statFormat, effectValue = GetAbilityAdvancedStatAndEffectByIndex(abilityId, advancedStatIndex)
                     local statEffect =
                     {
                         statType = statType,
                         format = statFormat,
                         value = effectValue,
                     }
-                    table.insert(self.mundusAdvancedStats, statEffect)
+                    table.insert(self.mundusAdvancedStats[slotIndex], statEffect)
                 end
-            elseif numMundusSlots >= i then
+            elseif numMundusSlots >= slotIndex then
                 mundusEntry =  ZO_GamepadEntryData:New(GetString("SI_MUNDUSSTONE", MUNDUS_STONE_INVALID), ZO_STAT_MUNDUS_ICONS[MUNDUS_STONE_INVALID])
                 mundusEntry.data =
                 {
@@ -1322,7 +1323,7 @@ do
             end
             if mundusEntry then
                 mundusEntry.displayMode = GAMEPAD_STATS_DISPLAY_MODE.MUNDUS
-                if i == 1 then
+                if slotIndex == 1 then
                     mundusEntry:SetHeader(GetString(SI_STATS_MUNDUS_TITLE))
                     self.mainList:AddEntryWithHeader("ZO_GamepadMenuEntryTemplate", mundusEntry)
                 else
@@ -1712,8 +1713,10 @@ function ZO_GamepadStats:InitializeAdvancedAttributesPanel()
             internalassert(false, "Invalid advanced stat format type.")
         end
 
-        if self.mundusAdvancedStats and #self.mundusAdvancedStats > 0 then
-            for i, mundusStat in ipairs(self.mundusAdvancedStats) do
+        local targetData = self.mainList:GetTargetData()
+        local selectedMundusIndex = targetData and targetData.data and targetData.data.buffIndex
+        if selectedMundusIndex and #self.mundusAdvancedStats[selectedMundusIndex] > 0 then
+            for i, mundusStat in ipairs(self.mundusAdvancedStats[selectedMundusIndex]) do
                 if mundusStat.statType == data.statType then
                     if self.displayMode == GAMEPAD_STATS_DISPLAY_MODE.MUNDUS then
                         local icon
@@ -1740,8 +1743,10 @@ function ZO_GamepadStats:InitializeAdvancedAttributesPanel()
         local _, flatValue = GetAdvancedStatValue(data.statType)
         data.formattedValue = tostring(flatValue)
 
-        if self.mundusAdvancedStats and #self.mundusAdvancedStats > 0 then
-            for i, mundusStat in ipairs(self.mundusAdvancedStats) do
+        local targetData = self.mainList:GetTargetData()
+        local selectedMundusIndex = targetData and targetData.buffIndex
+        if selectedMundusIndex and #self.mundusAdvancedStats[selectedMundusIndex] > 0 then
+            for i, mundusStat in ipairs(self.mundusAdvancedStats[selectedMundusIndex]) do
                 if mundusStat.statType == data.statType and mundusStat.format == ADVANCED_STAT_DISPLAY_FORMAT_FLAT then
                     if self.displayMode == GAMEPAD_STATS_DISPLAY_MODE.MUNDUS then
                         local icon
@@ -1768,8 +1773,10 @@ function ZO_GamepadStats:InitializeAdvancedAttributesPanel()
         local _, _, percentValue = GetAdvancedStatValue(data.statType)
         data.formattedValue = zo_strformat(SI_STAT_VALUE_PERCENT, percentValue)
 
-        if self.mundusAdvancedStats and #self.mundusAdvancedStats > 0 then
-            for i, mundusStat in ipairs(self.mundusAdvancedStats) do
+        local targetData = self.mainList:GetTargetData()
+        local selectedMundusIndex = targetData and targetData.buffIndex
+        if selectedMundusIndex and #self.mundusAdvancedStats[selectedMundusIndex] > 0 then
+            for i, mundusStat in ipairs(self.mundusAdvancedStats[selectedMundusIndex]) do
                 if mundusStat.statType == data.statType and mundusStat.format == ADVANCED_STAT_DISPLAY_FORMAT_PERCENT then
                     if self.displayMode == GAMEPAD_STATS_DISPLAY_MODE.MUNDUS then
                         local icon

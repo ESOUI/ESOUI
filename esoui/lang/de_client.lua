@@ -10068,6 +10068,7 @@ SafeAddString(SI_STATS_EQUIPMENT_BONUS_LOWEST_PIECE_KEYBOARD, "Niedrigstes Stüc
 SafeAddString(SI_STATS_EQUIPMENT_BONUS_TITLE_KEYBOARD, "Ausrüstung", 1)
 SafeAddString(SI_STATS_EQUIPMENT_BONUS_TOOLTIP_EMPTY_SLOT, "<<1>> fehlt", 0)
 SafeAddString(SI_STATS_GAMEPAD_AVAILABLE_POINTS, "Attributspunkte", 1)
+SafeAddString(SI_STATS_MUNDUS_FORMATTER, "<<1>>", 0)
 SafeAddString(SI_STATS_MUNDUS_INFO_BUTTON, "Mehr Informationen", 0)
 SafeAddString(SI_STATS_MUNDUS_NONE_TOOLTIP_DESCRIPTION, "Erkundet die Welt und findet mächtige Segen, um Eure Attribute zu verbessern.", 0)
 SafeAddString(SI_STATS_MUNDUS_NONE_TOOLTIP_TITLE, "Mundusstein/Segen: Leer", 0)
