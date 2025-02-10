@@ -13,7 +13,7 @@ function GroupMenu_Keyboard:Initialize(control)
     self.categoriesControl = self.control:GetNamedChild("Categories")
 
     local function OnStateChange(oldState, newState)
-        if newState == SCENE_SHOWING  then
+        if newState == ZO_STATE.SHOWING then
             if self.currentCategoryFragment then
                 SCENE_MANAGER:AddFragment(self.currentCategoryFragment)
             end
@@ -179,24 +179,25 @@ function GroupMenu_Keyboard:InitializeCategories()
             end
 
             if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
-                if self.currentCategoryFragment == categoryData.categoryFragment then
-                    if categoryData.onTreeEntrySelected then
-                        categoryData.onTreeEntrySelected(categoryData)
-                    end
-                else
-                    if self.currentCategoryFragment then
-                        SCENE_MANAGER:RemoveFragment(self.currentCategoryFragment)
-                    end
+                -- Order matters:
 
-                    -- Order matters:
-                    if categoryData.onTreeEntrySelected then
-                        categoryData.onTreeEntrySelected(categoryData)
-                    end
-                    SCENE_MANAGER:AddFragment(categoryData.categoryFragment)
+                local hasCategoryChanged = self.currentCategoryFragment ~= categoryData.categoryFragment
+                if hasCategoryChanged and self.currentCategoryFragment then
+                    SCENE_MANAGER:RemoveFragment(self.currentCategoryFragment)
+                end
+
+                self.currentCategoryFragment = categoryData.categoryFragment
+                if categoryData.onTreeEntrySelected then
+                    categoryData.onTreeEntrySelected(categoryData)
+                end
+                SCENE_MANAGER:AddFragment(categoryData.categoryFragment)
+            else
+                -- Queue the category to show by category data,
+                -- if possible, or by category fragment otherwise.
+                if not self:SetCategoryOnShowByData(categoryData) then
+                    self:SetCategoryOnShow(categoryData.categoryFragment)
                 end
             end
-
-            self.currentCategoryFragment = categoryData.categoryFragment
         end
 
         RefreshNode(control, categoryData, selected, control.enabled)
@@ -212,30 +213,69 @@ function GroupMenu_Keyboard:InitializeCategories()
     self.navigationTree:SetOpenAnimation("ZO_TreeOpenAnimation")
 end
 
+function GroupMenu_Keyboard:GetTreeNodeByCategoryFragment(categoryFragment)
+    local node = self.categoryFragmentToNodeLookup[categoryFragment]
+    return node
+end
+
+function GroupMenu_Keyboard:GetTreeNodeByCategoryData(categoryData)
+    local node = self.navigationTree:GetTreeNodeByData(categoryData)
+    return node
+end
+
+-- Queue the specified category fragment to show.
 function GroupMenu_Keyboard:SetCategoryOnShow(categoryFragment)
-    self.categoryFragmentToShow = categoryFragment
+    local node = self:GetTreeNodeByCategoryFragment(categoryFragment)
+    if node then
+        -- categoryDataToShow and categoryFragmentToShow are mutually exclusive.
+        self.categoryFragmentToShow = categoryFragment
+        self.categoryDataToShow = nil
+        return true
+    end
+    return false
 end
 
+-- Queue the specified category data to show.
 function GroupMenu_Keyboard:SetCategoryOnShowByData(categoryData)
-    self.categoryDataToShow = categoryData
+    local node = self:GetTreeNodeByCategoryData(categoryData)
+    if node then
+        -- categoryDataToShow and categoryFragmentToShow are mutually exclusive.
+        self.categoryDataToShow = categoryData
+        self.categoryFragmentToShow = nil
+        return true
+    end
+    return false
 end
 
+-- Show the specified category fragment, if the Group Menu is showing, or queue it to show.
 function GroupMenu_Keyboard:SetCurrentCategory(categoryFragment)
     if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
-        local node = self.categoryFragmentToNodeLookup[categoryFragment]
-        self.navigationTree:SelectNode(node)
-    end
-end
-
-function GroupMenu_Keyboard:SetCurrentCategoryByData(categoryData)
-    if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
-        local node = self.navigationTree:GetTreeNodeByData(categoryData)
+        -- Look up the tree node associated with the queued category fragment and select it.
+        local node = self:GetTreeNodeByCategoryFragment(categoryFragment)
         if node then
             self.navigationTree:SelectNode(node)
         end
+    else
+        -- Queue the category fragment to show.
+        self:SetCategoryOnShow(categoryFragment)
     end
 end
 
+-- Show the specified category data, if the Group Menu is showing, or queue it to show.
+function GroupMenu_Keyboard:SetCurrentCategoryByData(categoryData)
+    if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
+        -- Look up the tree node associated with the queued category data and select it.
+        local node = self:GetTreeNodeByCategoryData(categoryData)
+        if node then
+            self.navigationTree:SelectNode(node)
+        end
+    else
+        -- Queue the category data to show.
+        self:SetCategoryOnShowByData(categoryData)
+    end
+end
+
+-- Show the specified category fragment immediately.
 function GroupMenu_Keyboard:ShowCategory(categoryFragment)
     if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
         self:SetCurrentCategory(categoryFragment)
@@ -246,6 +286,7 @@ function GroupMenu_Keyboard:ShowCategory(categoryFragment)
     end
 end
 
+-- Show the specified category data immediately.
 function GroupMenu_Keyboard:ShowCategoryByData(categoryData)
     if KEYBOARD_GROUP_MENU_SCENE:IsShowing() then
         self:SetCurrentCategoryByData(categoryData)
