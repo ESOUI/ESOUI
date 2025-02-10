@@ -9539,7 +9539,7 @@ SafeAddString(SI_SKILL_STYLING_SKILL_NOT_PURCHASED, "Purchase this skill to assi
 SafeAddString(SI_SKILL_STYLING_TOOLTIP_DEFAULT_DESCRIPTION, "This is the default style for this skill.", 0)
 SafeAddString(SI_SKILL_STYLING_TOOLTIP_DEFAULT_TITLE, "Default Style", 0)
 SafeAddString(SI_SKILL_TOOLTIP_SKYSHARD_DESC, "Skyshards can be found throughout the world. Collecting three Skyshards grants an extra skill point.", 0)
-SafeAddString(SI_SKILL_TOOLTIP_XP_PROGRESS, "<<1>> : |cffffff<<2>> / <<3>>|r", 0)
+SafeAddString(SI_SKILL_TOOLTIP_XP_PROGRESS, "<<1>>: |cffffff<<2>> / <<3>>|r", 0)
 SafeAddString(SI_SKYSHARDDISCOVERYSTATUS0, "Undiscovered", 0)
 SafeAddString(SI_SKYSHARDDISCOVERYSTATUS1, "Discovered", 0)
 SafeAddString(SI_SKYSHARDDISCOVERYSTATUS2, "Acquired", 0)

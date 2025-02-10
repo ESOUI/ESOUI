@@ -78,7 +78,6 @@ function ZO_IngameSceneManager:SetInUIMode(inUIMode, bypassHideSceneConfirmation
                             self.manuallyEnteredHUDUIMode = nil
                             EndLooting()
                             SetGameCameraUIMode(false)
-                            ZO_ChatSystem_ExitChat()
                             self:HideTopLevels()
                             DIRECTIONAL_INPUT:Deactivate(self)
                             MAIN_MENU_MANAGER:ForceClearBlockingScenes()
